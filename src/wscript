@@ -4,19 +4,18 @@
 import sys
 import os
 
-dependencies_list = ['essentia']
-
 # This is a list of 1- or 2-tuples. The first element is the name of
 # the source file (less the .cpp extension) and is also used as the
 # binary name. The second element (if it exists) is a list of
 # additional files for the extractor
 sources = [
-        ('demo', ), 
 ]
 
 #sources = [
 #        ('demo1', ['demo_util', 'demo_process'] )
 #]
+
+lib_sources = []
 
 def options(ctx):
     ctx.add_option('--with-python', action='store_true',
@@ -31,7 +30,7 @@ def configure(ctx):
         ctx.recurse('python')
 
     ctx.check_cfg(package='essentia', uselib_store='ESSENTIA',
-        args=['--cflags', '--libs', '--modversion'], mandatory=True) 
+        args=['--cflags', '--libs', '--modversion'], mandatory=True)
 
 def build(ctx):
     print('→ building from ' + ctx.path.abspath())
@@ -54,6 +53,15 @@ def build(ctx):
             build_example(e[0])
         elif len(e) == 2:
             build_example(e[0], e[1])
+
+    ctx.shlib(
+        source   = [ctx.path.find_resource('frames.cpp')],
+        target   = 'framecount',
+        use      = 'ESSENTIA',
+        cxxflags = [ '-w' ],
+        install_path = '${PREFIX}/lib'
+    )
+
 
     ctx.add_group()
 

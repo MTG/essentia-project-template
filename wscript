@@ -12,17 +12,13 @@ out = 'build'
 
 
 def options(ctx):
-    ctx.load('compiler_cxx compiler_c')
+    ctx.load('compiler_cxx compiler_c python')
     ctx.recurse('src')
 
     ctx.add_option('--mode', action='store',
                    dest='MODE', default="release",
                    help='debug or release')
 
-    ctx.add_option('--arch', action='store',
-                   dest='ARCH', default="x64",
-                   help='Target architecture when compiling on OSX: i386, x64 or FAT')
-                                      
 def configure(ctx):
     print('→ configuring the project in ' + ctx.path.abspath())
 
